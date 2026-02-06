@@ -7,6 +7,8 @@
 
   var map = null;
   var geoJsonLayer = null;
+  var locationMarker = null;
+  var accuracyCircle = null;
 
   function initMap() {
     map = L.map('map', {
@@ -66,6 +68,52 @@
     sidebar.classList.remove('open');
   }
 
+  function goToCurrentLocation() {
+    if (!navigator.geolocation) {
+      alert('Lokasi tidak didukung oleh perangkat atau browser ini.');
+      return;
+    }
+    var btn = document.getElementById('btn-locate');
+    if (btn) btn.disabled = true;
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        var latLng = [lat, lng];
+        if (locationMarker) {
+          map.removeLayer(locationMarker);
+          locationMarker = null;
+        }
+        if (accuracyCircle) {
+          map.removeLayer(accuracyCircle);
+          accuracyCircle = null;
+        }
+        locationMarker = L.marker(latLng).addTo(map);
+        var acc = position.coords.accuracy;
+        if (typeof acc === 'number' && acc > 0) {
+          accuracyCircle = L.circle(latLng, {
+            radius: acc,
+            color: '#0ea5e9',
+            fillColor: '#0ea5e9',
+            fillOpacity: 0.15,
+            weight: 1
+          }).addTo(map);
+        }
+        map.flyTo(latLng, 17, { duration: 0.5 });
+        if (btn) btn.disabled = false;
+      },
+      function (err) {
+        var msg = 'Tidak dapat mengambil lokasi.';
+        if (err.code === 1) msg = 'Izin lokasi ditolak. Aktifkan akses lokasi untuk situs ini di pengaturan browser.';
+        else if (err.code === 2) msg = 'Posisi tidak tersedia.';
+        else if (err.code === 3) msg = 'Waktu permintaan habis. Coba lagi.';
+        alert(msg);
+        if (btn) btn.disabled = false;
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  }
+
   function bindSidebarButtons() {
     var toggle = document.getElementById('sidebar-toggle');
     var closeBtn = document.getElementById('sidebar-close');
@@ -77,6 +125,8 @@
     });
     if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
     if (handle) handle.addEventListener('click', closeSidebar);
+    var locateBtn = document.getElementById('btn-locate');
+    if (locateBtn) locateBtn.addEventListener('click', goToCurrentLocation);
   }
 
   function addGeoJsonLayer(geojson) {

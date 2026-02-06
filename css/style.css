@@ -125,6 +125,43 @@ html, body {
   transform: scale(0.98);
 }
 
+.btn-locate {
+  position: absolute;
+  bottom: 4rem;
+  right: 0.75rem;
+  z-index: 800;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--header-bg);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background var(--transition), transform var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-locate:hover,
+.btn-locate:focus {
+  background: #f0fdfa;
+  outline: none;
+}
+
+.btn-locate:active {
+  transform: scale(0.98);
+}
+
+.btn-locate-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
 .sidebar {
   position: fixed;
   bottom: 0;
