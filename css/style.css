@@ -162,6 +162,17 @@ html, body {
   height: 1.35rem;
 }
 
+.btn-locate.is-live {
+  background: var(--header-bg);
+  color: #fff;
+}
+
+.btn-locate.is-live:hover,
+.btn-locate.is-live:focus {
+  background: #0f766e;
+  color: #fff;
+}
+
 .sidebar {
   position: fixed;
   bottom: 0;

@@ -9,6 +9,7 @@
   var geoJsonLayer = null;
   var locationMarker = null;
   var accuracyCircle = null;
+  var watchId = null;
 
   function initMap() {
     map = L.map('map', {
@@ -68,38 +69,78 @@
     sidebar.classList.remove('open');
   }
 
+  function updateLocationMarker(latLng, accuracy, isFirst) {
+    if (locationMarker) {
+      locationMarker.setLatLng(latLng);
+    } else {
+      locationMarker = L.marker(latLng).addTo(map);
+    }
+    if (typeof accuracy === 'number' && accuracy > 0) {
+      if (accuracyCircle) {
+        accuracyCircle.setLatLng(latLng).setRadius(accuracy);
+      } else {
+        accuracyCircle = L.circle(latLng, {
+          radius: accuracy,
+          color: '#0ea5e9',
+          fillColor: '#0ea5e9',
+          fillOpacity: 0.15,
+          weight: 1
+        }).addTo(map);
+      }
+    } else if (accuracyCircle) {
+      map.removeLayer(accuracyCircle);
+      accuracyCircle = null;
+    }
+    if (isFirst) map.flyTo(latLng, 17, { duration: 0.5 });
+  }
+
+  function stopLocationTracking() {
+    if (watchId != null) {
+      navigator.geolocation.clearWatch(watchId);
+      watchId = null;
+    }
+    if (locationMarker) {
+      map.removeLayer(locationMarker);
+      locationMarker = null;
+    }
+    if (accuracyCircle) {
+      map.removeLayer(accuracyCircle);
+      accuracyCircle = null;
+    }
+    var btn = document.getElementById('btn-locate');
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove('is-live');
+      btn.setAttribute('aria-label', 'Lokasi saya');
+      btn.setAttribute('title', 'Lokasi saya');
+    }
+  }
+
   function goToCurrentLocation() {
     if (!navigator.geolocation) {
       alert('Lokasi tidak didukung oleh perangkat atau browser ini.');
       return;
     }
     var btn = document.getElementById('btn-locate');
-    if (btn) btn.disabled = true;
-    navigator.geolocation.getCurrentPosition(
+    if (watchId != null) {
+      stopLocationTracking();
+      return;
+    }
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('is-live');
+      btn.setAttribute('aria-label', 'Hentikan pelacakan lokasi');
+      btn.setAttribute('title', 'Hentikan pelacakan lokasi');
+    }
+    var firstFix = true;
+    watchId = navigator.geolocation.watchPosition(
       function (position) {
         var lat = position.coords.latitude;
         var lng = position.coords.longitude;
         var latLng = [lat, lng];
-        if (locationMarker) {
-          map.removeLayer(locationMarker);
-          locationMarker = null;
-        }
-        if (accuracyCircle) {
-          map.removeLayer(accuracyCircle);
-          accuracyCircle = null;
-        }
-        locationMarker = L.marker(latLng).addTo(map);
         var acc = position.coords.accuracy;
-        if (typeof acc === 'number' && acc > 0) {
-          accuracyCircle = L.circle(latLng, {
-            radius: acc,
-            color: '#0ea5e9',
-            fillColor: '#0ea5e9',
-            fillOpacity: 0.15,
-            weight: 1
-          }).addTo(map);
-        }
-        map.flyTo(latLng, 17, { duration: 0.5 });
+        updateLocationMarker(latLng, acc, firstFix);
+        if (firstFix) firstFix = false;
         if (btn) btn.disabled = false;
       },
       function (err) {
@@ -108,7 +149,7 @@
         else if (err.code === 2) msg = 'Posisi tidak tersedia.';
         else if (err.code === 3) msg = 'Waktu permintaan habis. Coba lagi.';
         alert(msg);
-        if (btn) btn.disabled = false;
+        stopLocationTracking();
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
