@@ -90,8 +90,8 @@ html, body {
 
 .btn-toggle {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  bottom: calc(2rem + 2.75rem + 0.5rem);
+  right: 0.5rem;
   z-index: 800;
   width: 2.5rem;
   height: 2.5rem;
