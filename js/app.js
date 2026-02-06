@@ -34,6 +34,11 @@
     var rows = Object.keys(properties).map(function (key) {
       var val = properties[key];
       if (val == null) val = '';
+      if (key === 'Luas' && (typeof val === 'number' || !isNaN(Number(val)))) {
+        val = Math.round(Number(val)) + ' m²';
+      } else {
+        val = String(val);
+      }
       return '<tr><th>' + escapeHtml(formatAttrKey(key)) + '</th><td>' + escapeHtml(String(val)) + '</td></tr>';
     }).join('');
     return '<table class="attr-table"><tbody>' + rows + '</tbody></table>';
