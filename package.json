@@ -1,0 +1,11 @@
+{
+  "name": "tkad-sambeng-pwa",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build-icons": "node scripts/build-pwa-icons.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5"
+  }
+}

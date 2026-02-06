@@ -59,7 +59,7 @@ Setelah deploy, akses aplikasi lewat URL HTTPS (mis. `https://username.github.io
 
 1. Buka **URL aplikasi** di Chrome Android (harus HTTPS).
 2. Menu Chrome (⋮) → **"Install app"** atau **"Add to Home screen"**.
-3. Konfirmasi. Ikon "GIS Sambeng" akan muncul di launcher; aplikasi bisa dipakai seperti aplikasi native dan mendukung penggunaan offline setelah data pernah dimuat.
+3. Konfirmasi. Ikon "TKAD Sambeng" akan muncul di launcher; aplikasi bisa dipakai seperti aplikasi native dan mendukung penggunaan offline setelah data pernah dimuat.
 
 ## Struktur Proyek
 
@@ -76,10 +76,7 @@ Setelah deploy, akses aplikasi lewat URL HTTPS (mis. `https://username.github.io
 
 ## Mengganti Icon PWA
 
-Icon saat ini berupa placeholder (warna solid). Untuk icon kustom:
-
-- Gunakan [PWA Asset Generator](https://www.pwabuilder.com/imageGenerator) atau generator favicon/PWA lain.
-- Ganti file `icons/icon-192.png` dan `icons/icon-512.png` dengan ukuran yang sama.
+Icon PWA (192×192 dan 512×512) memakai logo Kabupaten Cirebon dari `images/logo-kab-cirebon.png` di atas latar tema. Untuk membangun ulang ikon setelah mengubah logo: `npm install` lalu `npm run build-icons`. Hasil akan ditulis ke `icons/icon-192.png` dan `icons/icon-512.png`.
 
 ## Lisensi
 
