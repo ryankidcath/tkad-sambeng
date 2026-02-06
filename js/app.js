@@ -64,12 +64,14 @@
   function bindSidebarButtons() {
     var toggle = document.getElementById('sidebar-toggle');
     var closeBtn = document.getElementById('sidebar-close');
+    var handle = document.getElementById('sheet-handle');
     if (toggle) toggle.addEventListener('click', function () {
       var sidebar = document.getElementById('sidebar');
       if (sidebar && sidebar.classList.contains('open')) closeSidebar();
       else openSidebar({ __hint: 'Klik sebuah poligon di peta untuk melihat atributnya.' });
     });
     if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+    if (handle) handle.addEventListener('click', closeSidebar);
   }
 
   function addGeoJsonLayer(geojson) {
@@ -86,8 +88,6 @@
       },
       onEachFeature: function (feature, layer) {
         var props = feature.properties || {};
-        var popupContent = '<div class="popup-attrs">' + propsToHtml(props) + '</div>';
-        layer.bindPopup(popupContent, { maxWidth: 320 });
         layer.on('click', function () {
           openSidebar(props);
         });
