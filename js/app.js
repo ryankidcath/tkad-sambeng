@@ -186,6 +186,14 @@
         layer.on('click', function () {
           openSidebar(props);
         });
+        var id = props.id != null ? props.id : props.Id;
+        if (id != null) {
+          layer.bindTooltip(String(id), {
+            permanent: true,
+            direction: 'center',
+            className: 'polygon-id-label'
+          });
+        }
       }
     });
     geoJsonLayer.addTo(map);
