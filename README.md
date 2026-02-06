@@ -1,4 +1,4 @@
-# GIS Tanah Kas Aset Desa Sambeng (PWA)
+# Tanah Kas Aset Desa Sambeng (PWA)
 
 Aplikasi mobile GIS berbasis Progressive Web App (PWA) untuk menampilkan peta poligon Tanah Kas Aset Desa Sambeng, Kec. Gunung Jati, Kab. Cirebon. Dibangun dengan Leaflet, OpenStreetMap, dan stack gratis lainnya.
 

@@ -12,9 +12,9 @@
     map = L.map('map', {
       center: CENTER_SAMBENG,
       zoom: DEFAULT_ZOOM,
-      zoomControl: true
+      zoomControl: false
     });
-    L.control.zoom({ position: 'topright' }).addTo(map);
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
