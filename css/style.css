@@ -93,8 +93,8 @@ html, body {
   bottom: calc(2rem + 2.75rem + 0.5rem);
   right: 0.5rem;
   z-index: 800;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border: none;
   border-radius: var(--radius);
@@ -105,6 +105,9 @@ html, body {
   cursor: pointer;
   box-shadow: var(--shadow);
   transition: background var(--transition), transform var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-toggle:hover,
