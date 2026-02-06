@@ -219,9 +219,75 @@
     });
   }
 
+  var deferredInstallPrompt = null;
+  var INSTALL_DISMISS_KEY = 'tkad-sambeng-install-dismissed';
+
+  function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+  }
+
+  function shouldShowInstallBanner() {
+    try {
+      var dismissed = localStorage.getItem(INSTALL_DISMISS_KEY);
+      if (dismissed) {
+        var t = parseInt(dismissed, 10);
+        if (!isNaN(t) && Date.now() - t < 7 * 24 * 60 * 60 * 1000) return false;
+      }
+    } catch (e) {}
+    return !isStandalone();
+  }
+
+  function showInstallBanner() {
+    if (!deferredInstallPrompt || !shouldShowInstallBanner()) return;
+    var banner = document.getElementById('install-banner');
+    if (!banner) return;
+    banner.classList.add('visible');
+    banner.setAttribute('aria-hidden', 'false');
+  }
+
+  function hideInstallBanner() {
+    var banner = document.getElementById('install-banner');
+    if (banner) {
+      banner.classList.remove('visible');
+      banner.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function bindInstallBanner() {
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      showInstallBanner();
+    });
+
+    window.addEventListener('appinstalled', function () {
+      deferredInstallPrompt = null;
+      hideInstallBanner();
+    });
+
+    if (isStandalone()) return;
+
+    var installBtn = document.getElementById('install-btn');
+    var dismissBtn = document.getElementById('install-dismiss');
+    if (installBtn) installBtn.addEventListener('click', function () {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.then(function (choice) {
+        if (choice.outcome === 'accepted') hideInstallBanner();
+        deferredInstallPrompt = null;
+      });
+    });
+    if (dismissBtn) dismissBtn.addEventListener('click', function () {
+      try { localStorage.setItem(INSTALL_DISMISS_KEY, String(Date.now())); } catch (err) {}
+      hideInstallBanner();
+    });
+  }
+
   function init() {
     initMap();
     bindSidebarButtons();
+    bindInstallBanner();
     loadGeoJson();
     registerServiceWorker();
   }

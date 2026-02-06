@@ -327,3 +327,70 @@ html, body {
     font-size: 0.875rem;
   }
 }
+
+/* Banner pasang PWA di layar utama */
+.install-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 1.25rem;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  box-shadow: 0 -4px 12px rgb(0 0 0 / 0.15);
+  z-index: 850;
+  transform: translateY(100%);
+  transition: transform var(--transition);
+  display: none;
+}
+
+.install-banner.visible {
+  display: block;
+  transform: translateY(0);
+}
+
+.install-banner-text {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.install-banner-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.install-btn-primary,
+.install-btn-dismiss {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.install-btn-primary {
+  background: #fff;
+  color: var(--header-bg);
+}
+
+.install-btn-primary:hover,
+.install-btn-primary:focus {
+  background: #f0fdf4;
+  outline: none;
+}
+
+.install-btn-dismiss {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.install-btn-dismiss:hover,
+.install-btn-dismiss:focus {
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
