@@ -17,7 +17,6 @@
       zoom: DEFAULT_ZOOM,
       zoomControl: false
     });
-    L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
@@ -81,8 +80,8 @@
       } else {
         accuracyCircle = L.circle(latLng, {
           radius: accuracy,
-          color: '#0ea5e9',
-          fillColor: '#0ea5e9',
+          color: '#15803d',
+          fillColor: '#15803d',
           fillOpacity: 0.15,
           weight: 1
         }).addTo(map);
@@ -162,7 +161,7 @@
     if (toggle) toggle.addEventListener('click', function () {
       var sidebar = document.getElementById('sidebar');
       if (sidebar && sidebar.classList.contains('open')) closeSidebar();
-      else openSidebar({ __hint: 'Klik sebuah poligon di peta untuk melihat atributnya.' });
+      else openSidebar({ __hint: 'Klik bidang tanah di peta untuk melihat datanya.' });
     });
     if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
     if (handle) handle.addEventListener('click', closeSidebar);
@@ -177,9 +176,9 @@
     }
     geoJsonLayer = L.geoJSON(geojson, {
       style: {
-        color: '#0d9488',
+        color: '#166534',
         weight: 2,
-        fillColor: '#14b8a6',
+        fillColor: '#22c55e',
         fillOpacity: 0.35
       },
       onEachFeature: function (feature, layer) {

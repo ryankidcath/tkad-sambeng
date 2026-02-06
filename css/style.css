@@ -5,7 +5,8 @@
 }
 
 :root {
-  --header-bg: #0d9488;
+  --header-bg: #166534;
+  --header-bg-hover: #14532d;
   --header-fg: #fff;
   --sidebar-bg: #f8fafc;
   --sidebar-border: #e2e8f0;
@@ -87,43 +88,6 @@ html, body {
   background: #e2e8f0;
 }
 
-/* Leaflet zoom: same margin as locate button, stacked as one control group */
-.leaflet-bottom.leaflet-right {
-  right: 0.5rem !important;
-  bottom: 0.5rem !important;
-}
-
-.leaflet-control-zoom {
-  border: none !important;
-  box-shadow: var(--shadow) !important;
-  border-radius: 0 0 var(--radius) var(--radius) !important;
-  overflow: hidden;
-}
-
-.leaflet-control-zoom a {
-  width: 32px !important;
-  height: 32px !important;
-  line-height: 32px !important;
-  font-size: 18px !important;
-  background: #fff !important;
-  color: var(--header-bg) !important;
-  transition: background var(--transition);
-}
-
-.leaflet-control-zoom a:first-child {
-  border-top-left-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-}
-
-.leaflet-control-zoom a:hover {
-  background: #f0fdfa !important;
-  color: var(--header-bg) !important;
-}
-
-.leaflet-control-zoom a + a {
-  border-top: 1px solid var(--sidebar-border) !important;
-}
-
 .btn-toggle {
   position: absolute;
   top: 0.75rem;
@@ -145,7 +109,7 @@ html, body {
 
 .btn-toggle:hover,
 .btn-toggle:focus {
-  background: #f0fdfa;
+  background: #f0fdf4;
 }
 
 .btn-toggle:focus {
@@ -163,14 +127,14 @@ html, body {
 
 .btn-locate {
   position: absolute;
-  bottom: calc(0.5rem + 64px);
+  bottom: 0.5rem;
   right: 0.5rem;
   z-index: 800;
-  width: 32px;
-  height: 32px;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border: none;
-  border-radius: var(--radius) var(--radius) 0 0;
+  border-radius: var(--radius);
   background: #fff;
   color: var(--header-bg);
   cursor: pointer;
@@ -183,7 +147,7 @@ html, body {
 
 .btn-locate:hover,
 .btn-locate:focus {
-  background: #f0fdfa;
+  background: #f0fdf4;
 }
 
 .btn-locate:focus {
@@ -200,8 +164,8 @@ html, body {
 }
 
 .btn-locate-icon {
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .btn-locate.is-live {
@@ -211,7 +175,7 @@ html, body {
 
 .btn-locate.is-live:hover,
 .btn-locate.is-live:focus {
-  background: #0f766e;
+  background: var(--header-bg-hover);
   color: #fff;
 }
 
