@@ -314,6 +314,40 @@ html, body {
   margin: 0;
 }
 
+.sidebar-content .polygon-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-content .polygon-list li {
+  margin: 0;
+}
+
+.sidebar-content .polygon-list-item {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  text-align: left;
+  font-size: 0.875rem;
+  color: #1e293b;
+  background: #fff;
+  border: 1px solid var(--sidebar-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.sidebar-content .polygon-list-item:hover,
+.sidebar-content .polygon-list-item:focus {
+  background: #f0fdf4;
+  border-color: var(--header-bg);
+  outline: none;
+}
+
 @media (min-width: 640px) {
   .header {
     padding: 1.125rem 1.5rem;

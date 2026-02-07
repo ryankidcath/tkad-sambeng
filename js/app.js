@@ -10,6 +10,33 @@
   var locationMarker = null;
   var accuracyCircle = null;
   var watchId = null;
+  var selectedLayer = null;
+  var polygonList = [];
+
+  var defaultStyle = {
+    color: '#166534',
+    weight: 2,
+    fillColor: '#22c55e',
+    fillOpacity: 0.35
+  };
+  var selectedStyle = {
+    color: '#14532d',
+    weight: 3,
+    fillColor: '#166534',
+    fillOpacity: 0.5
+  };
+
+  function setSelectedLayer(layer) {
+    if (selectedLayer) {
+      selectedLayer.setStyle(defaultStyle);
+      selectedLayer.bringToBack();
+    }
+    if (layer) {
+      layer.setStyle(selectedStyle);
+      layer.bringToFront();
+    }
+    selectedLayer = layer;
+  }
 
   function initMap() {
     map = L.map('map', {
@@ -33,7 +60,12 @@
     if (properties.__hint) {
       return '<p class="empty">' + escapeHtml(properties.__hint) + '</p>';
     }
-    var rows = Object.keys(properties).map(function (key) {
+    var preferredOrder = ['id', 'Nama', 'Luas', 'Penggunaan'];
+    var keys = preferredOrder.filter(function (k) { return properties.hasOwnProperty(k); });
+    Object.keys(properties).forEach(function (k) {
+      if (preferredOrder.indexOf(k) === -1) keys.push(k);
+    });
+    var rows = keys.map(function (key) {
       var val = properties[key];
       if (val == null) val = '';
       if (key === 'Luas' && (typeof val === 'number' || !isNaN(Number(val)))) {
@@ -66,6 +98,7 @@
     if (!sidebar) return;
     sidebar.setAttribute('aria-hidden', 'true');
     sidebar.classList.remove('open');
+    setSelectedLayer(null);
   }
 
   function updateLocationMarker(latLng, accuracy, isFirst) {
@@ -154,17 +187,47 @@
     );
   }
 
+  function buildPolygonListHtml() {
+    if (polygonList.length === 0) return '<p class="empty">Belum ada data poligon.</p>';
+    var items = polygonList.map(function (item, index) {
+      var p = item.feature.properties || {};
+      var label = (p.id != null ? p.id : '') + ' – ' + (p.Nama || '');
+      return '<li><button type="button" class="polygon-list-item" data-index="' + index + '">' + escapeHtml(label) + '</button></li>';
+    }).join('');
+    return '<ul class="polygon-list">' + items + '</ul>';
+  }
+
+  function openPolygonList() {
+    var sidebar = document.getElementById('sidebar');
+    var content = document.getElementById('sidebar-content');
+    if (!sidebar || !content) return;
+    content.innerHTML = buildPolygonListHtml();
+    sidebar.setAttribute('aria-hidden', 'false');
+    sidebar.classList.add('open');
+  }
+
   function bindSidebarButtons() {
     var toggle = document.getElementById('sidebar-toggle');
     var closeBtn = document.getElementById('sidebar-close');
     var handle = document.getElementById('sheet-handle');
+    var content = document.getElementById('sidebar-content');
     if (toggle) toggle.addEventListener('click', function () {
       var sidebar = document.getElementById('sidebar');
       if (sidebar && sidebar.classList.contains('open')) closeSidebar();
-      else openSidebar({ __hint: 'Klik bidang tanah di peta untuk melihat datanya.' });
+      else openPolygonList();
     });
     if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
     if (handle) handle.addEventListener('click', closeSidebar);
+    if (content) content.addEventListener('click', function (e) {
+      var btn = e.target.closest('.polygon-list-item');
+      if (!btn) return;
+      var index = parseInt(btn.getAttribute('data-index'), 10);
+      if (isNaN(index) || index < 0 || index >= polygonList.length) return;
+      var item = polygonList[index];
+      map.fitBounds(item.layer.getBounds(), { padding: [24, 24], maxZoom: 17 });
+      setSelectedLayer(item.layer);
+      openSidebar(item.feature.properties);
+    });
     var locateBtn = document.getElementById('btn-locate');
     if (locateBtn) locateBtn.addEventListener('click', goToCurrentLocation);
   }
@@ -174,16 +237,15 @@
       map.removeLayer(geoJsonLayer);
       geoJsonLayer = null;
     }
+    selectedLayer = null;
+    polygonList = [];
     geoJsonLayer = L.geoJSON(geojson, {
-      style: {
-        color: '#166534',
-        weight: 2,
-        fillColor: '#22c55e',
-        fillOpacity: 0.35
-      },
+      style: defaultStyle,
       onEachFeature: function (feature, layer) {
         var props = feature.properties || {};
+        polygonList.push({ feature: feature, layer: layer });
         layer.on('click', function () {
+          setSelectedLayer(layer);
           openSidebar(props);
         });
       }
