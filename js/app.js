@@ -191,7 +191,8 @@
     if (polygonList.length === 0) return '<p class="empty">Belum ada data poligon.</p>';
     var items = polygonList.map(function (item, index) {
       var p = item.feature.properties || {};
-      var label = (p.id != null ? p.id : '') + ' – ' + (p.Nama || '');
+      var luasStr = (p.Luas != null && (typeof p.Luas === 'number' || !isNaN(Number(p.Luas)))) ? (Math.round(Number(p.Luas)) + ' m²') : (p.Luas || '');
+      var label = (p.id != null ? p.id : '') + ' – ' + (p.Nama || '') + ' – ' + luasStr + ' – ' + (p.Penggunaan || '');
       return '<li><button type="button" class="polygon-list-item" data-index="' + index + '">' + escapeHtml(label) + '</button></li>';
     }).join('');
     return '<ul class="polygon-list">' + items + '</ul>';
@@ -251,6 +252,11 @@
       }
     });
     geoJsonLayer.addTo(map);
+    polygonList.sort(function (a, b) {
+      var idA = (a.feature.properties && a.feature.properties.id != null) ? Number(a.feature.properties.id) : -1;
+      var idB = (b.feature.properties && b.feature.properties.id != null) ? Number(b.feature.properties.id) : -1;
+      return idA - idB;
+    });
     if (geojson.type === 'FeatureCollection' && geojson.features && geojson.features.length > 0) {
       map.fitBounds(geoJsonLayer.getBounds(), { padding: [24, 24], maxZoom: 17 });
     }
