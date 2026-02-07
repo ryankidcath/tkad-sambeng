@@ -49,6 +49,15 @@
     }).addTo(map);
   }
 
+  function fitBoundsAvoidingSidebar(bounds) {
+    var bottomPadding = Math.round(window.innerHeight * 0.55) + 24;
+    map.fitBounds(bounds, {
+      paddingTopLeft: [24, 24],
+      paddingBottomRight: [24, bottomPadding],
+      maxZoom: 17
+    });
+  }
+
   function formatAttrKey(key) {
     return String(key).replace(/_/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
   }
@@ -225,7 +234,7 @@
       var index = parseInt(btn.getAttribute('data-index'), 10);
       if (isNaN(index) || index < 0 || index >= polygonList.length) return;
       var item = polygonList[index];
-      map.fitBounds(item.layer.getBounds(), { padding: [24, 24], maxZoom: 17 });
+      fitBoundsAvoidingSidebar(item.layer.getBounds());
       setSelectedLayer(item.layer);
       openSidebar(item.feature.properties);
     });
@@ -247,6 +256,7 @@
         polygonList.push({ feature: feature, layer: layer });
         layer.on('click', function () {
           setSelectedLayer(layer);
+          fitBoundsAvoidingSidebar(layer.getBounds());
           openSidebar(props);
         });
       }
