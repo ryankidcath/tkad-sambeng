@@ -364,9 +364,6 @@
         deferredInstallPrompt = null;
       });
     });
-
-    var successClose = document.getElementById('install-success-close');
-    if (successClose) successClose.addEventListener('click', hideInstallSuccessMessage);
   }
 
   function init() {
