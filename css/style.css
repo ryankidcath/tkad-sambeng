@@ -416,3 +416,33 @@ html, body {
   background: #f0fdf4;
   outline: none;
 }
+
+/* Pesan sukses instalasi — full-screen menutupi konten */
+.install-success-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: none;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.install-success-message.visible {
+  display: flex;
+}
+
+.install-success-text {
+  margin: 0 0 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+  max-width: 20rem;
+}

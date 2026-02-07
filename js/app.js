@@ -324,6 +324,22 @@
     }
   }
 
+  function showInstallSuccessMessage() {
+    var el = document.getElementById('install-success-message');
+    if (el) {
+      el.classList.add('visible');
+      el.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  function hideInstallSuccessMessage() {
+    var el = document.getElementById('install-success-message');
+    if (el) {
+      el.classList.remove('visible');
+      el.setAttribute('aria-hidden', 'true');
+    }
+  }
+
   function bindInstallBanner() {
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault();
@@ -334,6 +350,7 @@
     window.addEventListener('appinstalled', function () {
       deferredInstallPrompt = null;
       hideInstallBanner();
+      showInstallSuccessMessage();
     });
 
     if (isStandalone()) return;
@@ -347,6 +364,9 @@
         deferredInstallPrompt = null;
       });
     });
+
+    var successClose = document.getElementById('install-success-close');
+    if (successClose) successClose.addEventListener('click', hideInstallSuccessMessage);
   }
 
   function init() {
