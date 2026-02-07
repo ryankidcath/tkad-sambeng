@@ -298,7 +298,6 @@
   }
 
   var deferredInstallPrompt = null;
-  var INSTALL_DISMISS_KEY = 'tkad-sambeng-install-dismissed';
 
   function isStandalone() {
     return window.matchMedia('(display-mode: standalone)').matches ||
@@ -306,13 +305,6 @@
   }
 
   function shouldShowInstallBanner() {
-    try {
-      var dismissed = localStorage.getItem(INSTALL_DISMISS_KEY);
-      if (dismissed) {
-        var t = parseInt(dismissed, 10);
-        if (!isNaN(t) && Date.now() - t < 7 * 24 * 60 * 60 * 1000) return false;
-      }
-    } catch (e) {}
     return !isStandalone();
   }
 
@@ -347,7 +339,6 @@
     if (isStandalone()) return;
 
     var installBtn = document.getElementById('install-btn');
-    var dismissBtn = document.getElementById('install-dismiss');
     if (installBtn) installBtn.addEventListener('click', function () {
       if (!deferredInstallPrompt) return;
       deferredInstallPrompt.prompt();
@@ -355,10 +346,6 @@
         if (choice.outcome === 'accepted') hideInstallBanner();
         deferredInstallPrompt = null;
       });
-    });
-    if (dismissBtn) dismissBtn.addEventListener('click', function () {
-      try { localStorage.setItem(INSTALL_DISMISS_KEY, String(Date.now())); } catch (err) {}
-      hideInstallBanner();
     });
   }
 
